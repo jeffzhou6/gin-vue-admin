@@ -9,7 +9,7 @@
         :show-file-list="false"
         class="upload-btn"
     >
-      <el-button size="small" type="primary">普通上传</el-button>
+      <el-button size="small" type="primary">{{ uploadBtnTitle}}</el-button>
     </el-upload>
   </div>
 </template>
@@ -25,6 +25,7 @@ const path = ref(import.meta.env.VITE_BASE_API)
 
 const userStore = useUserStore()
 const fullscreenLoading = ref(false)
+
 
 const checkFile = (file) => {
   fullscreenLoading.value = true
@@ -56,6 +57,13 @@ const uploadError = () => {
   })
   fullscreenLoading.value = false
 }
+
+const props = defineProps({
+  uploadBtnTitle: {
+    type: String,
+    default: "普通上传"
+  },
+})
 
 </script>
 

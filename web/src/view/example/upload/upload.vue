@@ -14,8 +14,6 @@
             class="upload-btn"
             @on-success="getTableData"
         />
-
-
         <el-form ref="searchForm" :inline="true" :model="search">
           <el-form-item label="">
             <el-input v-model="search.keyword" class="keyword" placeholder="请输入文件名或备注"/>
@@ -25,10 +23,23 @@
             <el-button size="small" type="primary" icon="search" @click="getTableData">查询</el-button>
           </el-form-item>
         </el-form>
-
+        <el-popover v-model:visible="deleteVisible" placement="top" width="160">
+        <p>此操作将永久文件, 确定要删除吗？</p>
+        <div style="text-align: right; margin-top: 8px;">
+            <el-button size="small" type="text" @click="deleteVisible = false">取消</el-button>
+            <el-button size="small" type="primary" @click="onDelete">确定</el-button>
+        </div>
+        <template #reference>
+            <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>
+        </template>
+        </el-popover>
       </div>
 
-      <el-table :data="tableData">
+      <el-table :data="tableData" 
+        tooltip-effect="dark"
+        row-key="ID"
+        @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" />
         <el-table-column align="left" label="预览" width="100">
           <template #default="scope">
             <CustomPic pic-type="file" :pic-src="scope.row.url"/>
@@ -78,7 +89,7 @@
 </template>
 
 <script setup>
-import { getFileList, deleteFile, editFileName } from '@/api/fileUploadAndDownload'
+import { getFileList, deleteFile, editFileName, deleteFileByIds } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
 import { useUserStore } from '@/pinia/modules/user'
 import CustomPic from '@/components/customPic/index.vue'
@@ -110,6 +121,16 @@ const handleSizeChange = (val) => {
 const handleCurrentChange = (val) => {
   page.value = val
   getTableData()
+}
+
+// 批量删除控制标记
+const deleteVisible = ref(false)
+
+// 多选数据
+const multipleSelection = ref([])
+// 多选
+const handleSelectionChange = (val) => {
+    multipleSelection.value = val
 }
 
 // 查询
@@ -188,6 +209,33 @@ const editFileNameFunc = async(row) => {
       message: '取消修改'
     });
   });
+}
+
+
+// 多选删除
+const onDelete = async() => {
+      const ids = []
+      if (multipleSelection.value.length === 0) {
+        ElMessage({
+          type: 'warning',
+          message: '请选择要删除的数据'
+        })
+        return
+      }
+      multipleSelection.value && multipleSelection.value.map(item => {
+        ids.push(item.ID)
+      })
+      const res = await deleteFileByIds({ ids })
+      if (res.code === 0) {
+        ElMessage({
+            type: 'success',
+            message: '删除成功'
+        })
+        if (tableData.value.length === 1 && page.value > 1) {
+          page.value--
+        }
+        getTableData()
+      }
 }
 </script>
 

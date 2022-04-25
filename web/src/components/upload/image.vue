@@ -9,7 +9,7 @@
       :before-upload="beforeImageUpload"
       :multiple="false"
     >
-      <el-button size="small" type="primary">压缩上传</el-button>
+      <el-button size="small" type="primary">{{ uploadBtnTitle}}</el-button>
     </el-upload>
   </div>
 </template>
@@ -33,7 +33,11 @@ const props = defineProps({
   maxWH: {
     type: Number,
     default: 1920 // 图片长宽上限
-  }
+  },
+  uploadBtnTitle: {
+    type: String,
+    default: "压缩上传"
+  },
 })
 
 const path = ref(import.meta.env.VITE_BASE_API)
