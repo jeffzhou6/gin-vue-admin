@@ -59,3 +59,9 @@ func NewClient() *cos.Client {
 	})
 	return client
 }
+
+// 获取图片缩略图
+func (*TencentCOS) GetImageThumbUrl(url string) string {
+	// TODO:
+	return url
+}

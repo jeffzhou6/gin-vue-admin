@@ -1,10 +1,11 @@
 package upload
 
 import (
+	"mime/multipart"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/huaweicloud/huaweicloud-sdk-go-obs/obs"
 	"github.com/pkg/errors"
-	"mime/multipart"
 )
 
 var HuaWeiObs = new(_obs)
@@ -62,4 +63,10 @@ func (o *_obs) DeleteFile(key string) error {
 		return errors.Wrapf(err, "删除对象(%s)失败!, output: %v", key, output)
 	}
 	return nil
+}
+
+// 获取图片缩略图
+func (*_obs) GetImageThumbUrl(url string) string {
+	// TODO:
+	return url
 }

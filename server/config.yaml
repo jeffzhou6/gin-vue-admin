@@ -88,12 +88,12 @@ jwt:
 local:
   path: uploads/file
 mysql:
-  path: 120.78.65.223
+  path: localhost
   port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: jyjy-new
   username: root
-  password: ddyx18@236
+  password: root
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: error
@@ -110,12 +110,12 @@ pgsql:
   log-mode: ""
   log-zap: false
 qiniu:
-  zone: ZoneHuaDong
-  bucket: ""
-  img-path: ""
+  zone: ZoneHuanan
+  bucket: "jyjy"
+  img-path: "https://pic.fsmichuang.com"
   use-https: false
-  access-key: ""
-  secret-key: ""
+  access-key: "VRQvrNOf1ywRzamZKUSMKl5rOwAGS68c_UGmE6qm"
+  secret-key: "sylkWI2udg4a7cqZHrisuaE-N-Jpq5M1olHScCok"
   use-cdn-domains: false
 redis:
   db: 0
@@ -125,7 +125,7 @@ system:
   env: public
   addr: 8888
   db-type: mysql
-  oss-type: local
+  oss-type: qiniu
   use-multipoint: false
   use-redis: false
   iplimit-count: 15000

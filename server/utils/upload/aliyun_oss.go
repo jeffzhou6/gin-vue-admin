@@ -2,7 +2,9 @@ package upload
 
 import (
 	"errors"
+	"fmt"
 	"mime/multipart"
+	"strings"
 	"time"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
@@ -72,4 +74,12 @@ func NewBucket() (*oss.Bucket, error) {
 	}
 
 	return bucket, nil
+}
+
+// 获取图片缩略图
+func (*AliyunOSS) GetImageThumbUrl(url string) string {
+	if strings.Contains(url, "?x-oss-process=image/resize") {
+		return url
+	}
+	return fmt.Sprintf("%s?x-oss-process=image/resize,m_fill,h_%d,w_%d", url, 400, 400)
 }

@@ -92,3 +92,23 @@ func (u *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+// @Tags ExaFileUploadAndDownload
+// @Summary 删除文件
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Param data body ids "传入文件里面id即可"
+// @Success 200 {object} response.Response{msg=string} "删除文件"
+// @Router /fileUploadAndDownload/DeleteFileByIds [post]
+func (u *FileUploadAndDownloadApi) DeleteFileByIds(c *gin.Context) {
+	var obj = struct {
+		Ids []uint `json:"ids"`
+	}{}
+	_ = c.ShouldBindJSON(&obj)
+	if err := fileUploadAndDownloadService.DeleteFileByIds(obj.Ids); err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}

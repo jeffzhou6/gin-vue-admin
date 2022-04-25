@@ -12,6 +12,7 @@ import (
 type OSS interface {
 	UploadFile(file *multipart.FileHeader) (string, string, error)
 	DeleteFile(key string) error
+	GetImageThumbUrl(url string) string
 }
 
 // NewOss OSS的实例化方法

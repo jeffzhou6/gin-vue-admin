@@ -34,6 +34,18 @@ func (e *FileUploadAndDownloadService) FindFile(id uint) (error, example.ExaFile
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
+//@function: FindFile
+//@description: 查询文件记录
+//@param: id uint
+//@return: error, model.ExaFileUploadAndDownload
+
+func (e *FileUploadAndDownloadService) FindFileList(ids []uint) (error, []example.ExaFileUploadAndDownload) {
+	var files []example.ExaFileUploadAndDownload
+	err := global.GVA_DB.Where("id in (?)", ids).Find(&files).Error
+	return err, files
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
 //@function: DeleteFile
 //@description: 删除文件记录
 //@param: file model.ExaFileUploadAndDownload
@@ -50,6 +62,25 @@ func (e *FileUploadAndDownloadService) DeleteFile(file example.ExaFileUploadAndD
 		return errors.New("文件删除失败")
 	}
 	err = global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(&file).Error
+	return err
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: DeleteFile
+//@description: 删除文件记录
+//@param: file model.ExaFileUploadAndDownload
+//@return: err error
+
+func (e *FileUploadAndDownloadService) DeleteFileByIds(ids []uint) (err error) {
+	oss := upload.NewOss()
+	err, files := e.FindFileList(ids)
+	if err != nil {
+		return err
+	}
+	for _, v := range files {
+		oss.DeleteFile(v.Key)
+	}
+	err = global.GVA_DB.Where("id in (?)", ids).Unscoped().Delete(&files).Error
 	return err
 }
 

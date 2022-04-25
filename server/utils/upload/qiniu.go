@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"mime/multipart"
+	"strings"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -93,4 +94,12 @@ func qiniuConfig() *storage.Config {
 		cfg.Zone = &storage.ZoneXinjiapo
 	}
 	return &cfg
+}
+
+// 获取图片缩略图
+func (*Qiniu) GetImageThumbUrl(url string) string {
+	if strings.Contains(url, "?imageView2/") {
+		return url
+	}
+	return fmt.Sprintf("%s?imageView2/1/w/%d/h/%d", url, 400, 400)
 }

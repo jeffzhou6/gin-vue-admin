@@ -83,3 +83,9 @@ func (*Local) DeleteFile(key string) error {
 	}
 	return nil
 }
+
+// 获取图片缩略图
+func (*Local) GetImageThumbUrl(url string) string {
+	// TODO:
+	return url
+}

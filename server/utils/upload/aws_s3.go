@@ -95,3 +95,9 @@ func newSession() *session.Session {
 	})
 	return sess
 }
+
+// 获取图片缩略图
+func (*AwsS3) GetImageThumbUrl(url string) string {
+	// TODO:
+	return url
+}
